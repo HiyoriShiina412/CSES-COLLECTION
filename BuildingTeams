@@ -1,0 +1,74 @@
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
+ 
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+#define fi first
+#define se second
+#define pb push_back
+#define ll long long
+#define ld long double
+#define pi pair<ll, ll>
+#define sz(a) (int)a.size()
+#define all(a) a.begin(), a.end()
+#define rep(i, a, b) for (int i = (int)a; i <= b; ++i)
+#define rep2(i, a, b) for (int i = (int)a; i >= b; --i)
+#define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+ 
+const int maxn = 1e5 + 5;
+const ll mod = 1e9 + 7;
+ 
+ll n, m;
+bool vis[maxn];
+ll col[maxn];
+vector<ll> adj[maxn];
+ 
+bool dfs(ll u) {
+    vis[u] = true;
+    for (auto v : adj[u]) {
+        if (col[v] == col[u]) return false;
+        if (!vis[v]) {
+            col[v] = !col[u];
+            if (!dfs(v)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+ 
+void UocjAC() {
+    memset(col, -1, sizeof(col));
+    cin >> n >> m;
+    rep (i, 1, m) {
+        ll u, v;
+        cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+    rep (i, 1, n) {
+        if (!vis[i]) {
+            col[i] = 0;
+            if (!dfs(i)) {
+                cout << "IMPOSSIBLE";
+                return;
+            }
+        }
+    }
+    rep (i, 1, n) {
+        cout << ((col[i]) ? 2 : 1) << " ";
+    }
+}
+ 
+int main(){
+    IOS
+    // freopen(".inp","r",stdin);
+    // freopen(".out","w",stdout);
+    ll tc = 1; // cin >> tc;
+    while(tc--) {
+        UocjAC();
+    }
+    return 0;
+}
